@@ -27,20 +27,20 @@ int main() {
 
   while (true) {
     char *currentline = getinput();
+    if (arr[4])
+      free(arr[4]);
+    for (int i = 4; i > 0; i--) {
+      arr[i] = arr[i - 1];
+    }
+
+    arr[0] = strdup(currentline);
+
     if (strcmp(currentline, "print") == 0) {
-      for (int i = 0; i < 5; i++) {
+      for (int i = 4; i >= 0; i--) {
         if (arr[i]) {
           printf("%s\n", arr[i]);
         }
       }
-    } else {
-      if (arr[4])
-        free(arr[4]);
-      for (int i = 4; i > 0; i--) {
-        arr[i] = arr[i - 1];
-      }
-
-      arr[0] = strdup(currentline);
     }
   }
   for (int i = 0; i < 5; i++) {
