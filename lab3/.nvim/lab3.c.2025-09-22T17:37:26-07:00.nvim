@@ -1,0 +1,49 @@
+#define _GNU_SOURCE
+#include <stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+char *getinput() {
+  char *line = NULL;
+  size_t len;
+  printf("Enter input: ");
+  ssize_t read = getline(&line, &len, stdin);
+
+  if (read == -1) {
+    perror("reading command failed");
+    exit(1);
+  }
+  line[read - 1] = '\0';
+  printf("%s", line);
+  return line;
+}
+
+int main() {
+
+  //char **arr = malloc(5 * sizeof(char));
+  //for (int i = 0; i < 5; i++) {
+  //  arr[0] = NULL;}
+
+  int current = 0;
+
+  while (true) {
+    char *currentline = getinput();
+    if (strcmp(currentline, "print") == 0) {
+      for (int i = 0; i < 5; i++) {
+        if (arr[i]) {
+          printf("%s\n", arr[i]);
+        }
+      }
+    } else {
+      free(arr[current]);
+      arr[current] = strdup(currentline);
+      current = (current + 1) % 5;
+    }
+  }
+
+  for (int i = 0; i < 5; i++) {
+    free(arr[i]);
+  }
+  free(arr);
+}

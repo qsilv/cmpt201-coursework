@@ -1,0 +1,51 @@
+#define _POSIX_C_SOURCE 200809L
+#define _GNU_SOURCE
+#include <stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/wait.h>
+#include <unistd.h>
+int main() {
+  char *line = NULL;
+  size_t len;
+  // solution influenced by lab example solution in class
+  while (true) {
+    printf("Enter programs to run: ");
+    ssize_t read = getline(&line, &len, stdin);
+    if (read == -1) {
+      perror("reading command failed");
+      break;
+    } else if (read > 0) {
+      line[len - 1] = '\0';
+      printf("%s", line);
+    }
+
+    pid_t pid = fork();
+
+    if (pid != 0) {
+      // fork returns 0 when child therefore this is parent process
+      int status = 0; // variable where waitpid returns the status called by
+                      // WIFEXITED to check
+
+      if (waitpid(pid, &status, 0) == -1) {
+        // waitpid returns -1 upon failure
+        perror("waitpid failed\n");
+        exit(EXIT_FAILURE); // exit_failure indicates failure in exit()
+      }
+      if (WIFEXITED(status)) {
+        // returns true if child terminated normally
+        printf("child exited\n");
+      }
+      free(line);
+      line = NULL;
+    } else { // this is the child
+      if (execl(line, "ls", (char *)NULL) ==  -1) { // dont have to tokenize command can run as path
+        perror("execl failed\n");
+        exit(EXIT_FAILURE);
+      } else {
+        exit(EXIT_SUCCESS);
+      }
+    }
+  }
+}

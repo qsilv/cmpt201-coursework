@@ -1,0 +1,11 @@
+#include <stdbool.h>
+#include <stdio.h>
+#include <unistd.h>
+int main() {
+  int who = fork();
+  if (who == 0) {
+    printf("child %d, parent %d \n", getpid(), getppid());
+  } else {
+    printf("parent %d, child %d \n", getpid(), who);
+  }
+}

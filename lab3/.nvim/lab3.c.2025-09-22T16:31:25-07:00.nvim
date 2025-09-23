@@ -1,0 +1,19 @@
+
+
+
+int main() {
+  char *line = NULL;
+  size_t len;
+  // solution influenced by lab example solution in class
+  while (true) {
+    printf("Enter programs to run: ");
+    ssize_t read = getline(&line, &len, stdin);
+    if (read == -1) {
+      perror("reading command failed");
+      break;
+    } else if (read > 0) {
+      line[read - 1] = '\0'; // read returns the chars read versus the buffer
+                             // size in len which is better
+    }
+
+

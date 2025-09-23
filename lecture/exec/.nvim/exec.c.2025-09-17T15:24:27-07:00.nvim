@@ -1,0 +1,16 @@
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <stdio.h>
+
+int main(){
+  int pid=fork();
+
+  if (pid){
+    execl("/usr/bin/ls", "/usr/bin/ls", "-a", (char *) NULL);
+  }
+  else{
+    execl("/usr/bin/ls", "/usr/bin/ls", "-a", "-l", "-h", (char *) NULL);
+  }
+  printf("%d\n", pid);
+}

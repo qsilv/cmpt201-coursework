@@ -1,0 +1,15 @@
+#include <stdbool.h>
+#include <stdio.h>
+#include <unistd.h>
+#include <sys/types.h>
+
+int main() {
+
+  printf("start pid: %d, parent pid: %d \n", getpid(), getppid());
+  int who = fork();
+  if (who == 0) {
+    printf("child: pid= %d, parent: pid= %d \n", getpid(), getppid());
+  } else {
+    printf("parent: pid= %d, child: pid= %d \n", getpid(), who);
+  }
+}

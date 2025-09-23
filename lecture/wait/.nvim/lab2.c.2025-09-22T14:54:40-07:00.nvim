@@ -1,0 +1,35 @@
+#define _POSIX_C_SOURCE 200809L
+#define _GNU_SOURCE
+#include <stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/wait.h>
+#include <unistd.h>
+int main() {
+
+  pid_t pid = fork();
+
+  if (pid != 0) {
+    // fork returns 0 when child therefore this is parent process
+    int status = 0; // variable where waitpid returns the status called by
+
+    if (waitpid(pid, &status, 0) == -1) {
+      // waitpid returns -1 upon failure
+      perror("waitpid failed\n");
+      exit(EXIT_FAILURE); // exit_failure indicates failure in exit()
+    }
+    if (WIFEXITED(status)) {
+      // returns true if child terminated normally
+      printf("child exited\n");
+    }
+  } else { // this is the child
+    if (execl("/bin/ls", "ls", "-a", "-l", (char *)NULL) ==
+        -1) { // dont have to tokenize command can run as path
+      perror("execl failed\n");
+      exit(EXIT_FAILURE);
+    } else {
+      exit(EXIT_SUCCESS);
+    }
+  }
+}
